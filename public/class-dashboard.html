@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Dashboard - LearnXP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/dashboard.css">
+    <link rel="stylesheet" href="CSS/sidebar.css">
+    <style>
+        body {
+            background: url('icons/OceanBackground.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 50px 40px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .main-content.shifted {
+            margin-left: 50px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .class-title {
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 3px solid #ff00ff;
+            display: inline-block;
+        }
+
+        .new-class-btn {
+            background: #800080;
+            color: #fff;
+            border: 2px solid #ff00ff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .new-class-btn:hover {
+            background: #ff00ff;
+            box-shadow: 0 0 15px #800080;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            min-height: 300px; /* Ensure the grid has enough height for the empty state */
+            position: relative;
+        }
+
+        .map-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 10px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .map-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        .map-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .map-card .map-name {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .empty-state {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 20px 30px;
+            text-align: center;
+            color: #d3d3d3;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        .empty-state i {
+            color: #ff00ff;
+            font-size: 1.5em;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            color: #fff;
+        }
+
+        .modal-header, .modal-footer {
+            border: none;
+        }
+
+        .modal-title {
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .modal-body input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ff00ff;
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .modal-body input::placeholder {
+            color: #d3d3d3;
+        }
+
+        .btn-save {
+            background: #ff00ff;
+            color: #fff;
+            border: 2px solid #800080;
+            border-radius: 20px;
+            padding: 8px 20px;
+            text-transform: uppercase;
+        }
+
+        .btn-save:hover {
+            background: #800080;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            opacity: 1; /* Ensure the button is fully visible */
+            transition: color 0.3s ease, opacity 0.3s ease;
+        }
+
+        .btn-close:hover {
+            color: #ff00ff; /* Change color on hover for better visibility */
+            opacity: 1; /* Prevent the button from hiding */
+        }
+
+        .btn-close:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* New CSS for student list and details */
+        .class-details {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            color: #fff;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .class-details h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .class-details p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .student-list {
+            margin-top: 20px;
+        }
+
+        .student-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .add-student-btn {
+            background: #ff00ff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .add-student-btn:hover {
+            background: #800080;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 200px;
+                padding: 15px;
+            }
+
+            .class-title {
+                font-size: 1.8em;
+            }
+
+            .map-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .map-card img {
+                height: 120px;
+            }
+
+            .empty-state {
+                font-size: 1em;
+                padding: 15px 20px;
+            }
+
+            .class-details {
+                padding: 15px;
+            }
+
+            .class-details h2 {
+                font-size: 1.5rem;
+            }
+
+            .class-details p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <div class="main-content">
+        <div class="header-container">
+            <div class="class-title">Class Dashboard</div>
+            <button class="new-class-btn" data-bs-toggle="modal" data-bs-target="#newClassModal">New Class</button>
+        </div>
+        <div class="map-grid" id="mapGrid">
+            <!-- Maps will be dynamically inserted here -->
+        </div>
+    </div>
+    <div id="logoutConfirm" class="logout-confirm">
+        <p>Are you sure you want to logout?</p>
+        <button id="confirmLogout" class="btn">Yes</button>
+        <button id="cancelLogout" class="btn">No</button>
+    </div>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <div class="message" id="loadingMessage">Loading Maps...</div>
+        </div>
+    </div>
+    <!-- Modal for adding a new class -->
+    <div class="modal fade" id="newClassModal" tabindex="-1" aria-labelledby="newClassModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newClassModalLabel">Create New Class</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="classTitle" class="form-label">Subject Name</label>
+                        <input type="text" class="form-control" id="classTitle" placeholder="Enter subject name (e.g., History)">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Map Preview</label>
+                        <img id="mapPreview" src="" alt="Map Preview" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-save" id="saveClassBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template id="sidebar-template">
+        <div class="sidebar">
+            <button id="hamburgerMenu" class="hamburger-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="logo d-flex align-items-center justify-content-center">
+                <img src="icons/LearnXPLogo.png" alt="LearnXP Logo" class="logo-image">
+                <span class="logo-text">LEARNXP</span>
+            </div>
+            <ul class="nav flex-column" id="sidebar-nav">
+                <!-- Navigation items will be injected by sidebar.js -->
+            </ul>
+        </div>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/classDashboard.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'927670d7db84672e',t:'MTc0MzE1NzcwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

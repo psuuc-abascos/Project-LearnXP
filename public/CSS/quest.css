@@ -1,0 +1,251 @@
+body {
+    background: url('../icons/OceanBackground.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.main-content {
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.title-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.quests-title {
+    font-size: 2.5em;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 3px solid #ff0000;
+    display: inline-block;
+}
+
+.map-container {
+    position: relative;
+    min-height: 700px;
+    width: 100%;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.map-card {
+    position: absolute;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    width: 200px; /* Original size for map selection */
+    height: 200px; /* Original size for map selection */
+}
+
+.map-card.zoomed {
+    width: 800px; /* Increased from 600px to 800px */
+    height: 800px; /* Increased from 600px to 800px */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.map-card:hover:not(.zoomed) {
+    transform: scale(1.1);
+}
+
+.map-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.map-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    image-rendering: pixelated;
+    filter: contrast(1.2);
+}
+
+.map-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 3px solid #800080;
+    text-align: center;
+    width: 180px; /* Kept original size for map selection */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.map-label h3 {
+    font-size: 1.1em;
+    margin: 0;
+    color: #fff;
+    text-shadow: 1px 1px 3px #000;
+}
+
+.quest-card {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 8px; /* Increased from 6px for better spacing */
+    border-radius: 6px;
+    border: 2px solid #800080;
+    z-index: 3;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: space-between; /* Distribute space between elements */
+    min-width: 90px; /* Minimum width */
+    min-height: 60px; /* Minimum height */
+    overflow: auto; /* Allow scrolling if content exceeds container */
+}
+
+.quest-card h3 {
+    font-size: 0.9em;
+    margin: 0 0 4px; /* Increased margin for spacing */
+    text-transform: uppercase;
+    overflow-wrap: break-word; /* Allow text to wrap */
+    word-break: break-word; /* Break words if necessary */
+}
+
+.quest-card p {
+    font-size: 0.7em;
+    margin: 0 0 6px;
+    color: #ddd;
+    overflow-wrap: break-word; /* Allow text to wrap */
+    word-break: break-word; /* Break words if necessary */
+    flex-grow: 1; /* Allow description to grow and fill available space */
+}
+
+.quest-card .btn {
+    width: 100%;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    padding: 4px 0;
+    border: none;
+    border-radius: 4px;
+    color: #fff; /* Ensure text remains white for readability */
+    cursor: pointer;
+    flex-shrink: 0; /* Prevent button from shrinking */
+    margin-top: 4px; /* Add space above the button */
+}
+
+/* Button background for "Not Finished" (orange) */
+.quest-card .btn-warning {
+    background-color: #ff9500; /* Orange background */
+}
+
+/* Button background for "Completed" (green) */
+.quest-card .btn-success {
+    background-color: #008000; /* Green background */
+}
+
+.back-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border: 2px solid #800080;
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    text-transform: uppercase;
+    transition: background 0.3s ease;
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.back-btn:hover {
+    background: #800080;
+}
+
+/* Quest Modal Styles */
+.quest-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.quest-modal-content {
+    position: relative;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 20px #ff00ff, 0 0 40px #800080;
+    padding: 20px;
+    border-radius: 15px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    backdrop-filter: blur(5px);
+}
+
+.quest-modal-content h2 {
+    color: #ff00ff;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.quest-modal-content h3 {
+    color: #fff;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.accept-btn {
+    background: #ff00ff;
+    color: #fff;
+    border: 2px solid #800080;
+    padding: 10px 30px;
+    border-radius: 25px;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.accept-btn:hover {
+    background: #800080;
+    box-shadow: 0 0 15px #ff00ff;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #ff00ff;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-close-btn:hover {
+    color: #fff;
+}
